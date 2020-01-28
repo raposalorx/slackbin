@@ -1,0 +1,24 @@
+shopt -s nullglob
+
+source *.info
+if [ -z "$DOWNLOAD_x86_64" ]
+then
+	echo $DOWNLOAD | xargs wget
+else
+	echo $DOWNLOAD_x86_64
+fi
+for i in *.gz
+do
+	tar -xzf "$i"
+done
+for i in *.bz2
+do
+	tar -xjf "$i"
+done
+for i in *.xz
+do
+	tar -xJf "$i"
+done
+
+chmod +x *.SlackBuild
+
