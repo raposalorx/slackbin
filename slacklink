@@ -1,0 +1,10 @@
+#!/bin/bash
+
+PKG=$(slackfindexact "$1")
+
+if [ ! -z "$PKG" ]
+then
+  ln -s $PKG /root/src/
+else
+  echo "PKG \"$1\" not found"
+fi
