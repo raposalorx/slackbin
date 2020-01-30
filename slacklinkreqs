@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source *.info
+
+for i in $REQUIRES
+do
+  slackcheckreq "$i"
+  E=$?
+  if [ $E -eq 0 ]
+  then
+    echo installed
+  fi
+  if [ $E -eq 1 ]
+  then
+    echo notinstalled
+  fi
+  if [ $E -eq 2 ]
+  then
+    echo linking...
+    slacklink "$i"
+  fi
+  if [ $E -eq 3 ]
+  then
+    echo doesntexist
+  fi
+done

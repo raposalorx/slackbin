@@ -1,0 +1,70 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+  echo "please provide a package"
+  exit 1
+fi
+
+echo '--->'
+
+READY=0
+
+if [ -d "/root/src/$1" ]
+then
+  cd "/root/src/$1"
+  source *.info
+  slacklinkreqs # link missing reqs
+  cd /root/src
+
+  for i in $REQUIRES
+  do
+    slackcheckreq "$i"
+    E=$?
+    if [ $E -eq 0 ]
+    then
+      echo installed
+    fi
+    if [ $E -eq 1 ]
+    then
+      echo notinstalled
+      READY=$READY+1
+      slackinstall "$i"
+      Z=$?
+      if [ $Z ! -eq 0 ]
+      then
+        echo "FAILED $Z"
+        exit $Z
+      fi
+    fi
+    # if [ $E -eq 2 ] linkreqs covered this case
+    if [ $E -eq 3 ]
+    then
+      echo doesntexist
+      exit 1 # package isn't going to work anyways
+    fi
+  done
+
+echo "ready $READY"
+if [ $READY -eq 0 ]
+then
+  echo "$1 - Installing..."
+  cd "/root/src/$1"
+  slackinstallpkg
+  if [ $? -eq 0 ]
+  then
+    mv "/root/src/$1" /root/src/installed/
+    echo mv "/root/src/$1" /root/src/installed/
+  else
+    echo ERROR
+    exit 1
+  fi
+else
+  echo "Reprovisioning..."
+  slackinstall "$1"
+fi
+
+else
+  exit 1
+fi
+echo '<---'

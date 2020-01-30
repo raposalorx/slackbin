@@ -1,0 +1,25 @@
+#!/bin/bash
+
+source *.info
+
+for i in $REQUIRES
+do
+  echo -n "$i - "
+  if [ -d /root/src/"$i" ]
+  then
+    echo "not installed"
+  else
+    if [ -d /root/src/installed/"$i" ]
+    then
+      echo "Installed"
+    else
+      LNK=$(slackfindexact "$i")
+      if [ -d "$LNK" ]
+      then
+        echo "not linked - $LNK"
+      else
+        echo "DOESN'T EXIST"
+      fi
+    fi
+  fi
+done
