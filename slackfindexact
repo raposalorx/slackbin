@@ -1,0 +1,1 @@
+find /root/slackbuilds -type d -maxdepth 2 -iname ''"$1"''

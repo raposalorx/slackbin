@@ -1,3 +1,5 @@
+#!/bin/bash
+
 shopt -s nullglob
 
 source *.info
@@ -5,7 +7,7 @@ if [ -z "$DOWNLOAD_x86_64" ]
 then
 	echo $DOWNLOAD | xargs wget
 else
-	echo $DOWNLOAD_x86_64
+	echo $DOWNLOAD_x86_64 | xargs wget
 fi
 for i in *.gz
 do
